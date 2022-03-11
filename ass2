@@ -1,0 +1,206 @@
+SQL> connect user1;
+Enter password:
+Connected.
+SQL> grant insert on emp to user2;
+Grant succeeded.
+SQL> connect user2;
+Enter password:
+Connected.
+SQL> select * from user1.emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+
+SQL> insert into user1.emp values(3,'chaithu','teacher',15000);
+1 row created.
+SQL> insert into user1.emp values(3,'jaya','dtp',25000);
+1 row created.
+SQL> insert into user1.emp values(4,'madhu','office',20000);
+1 row created.
+SQL> insert into user1.emp values(5,'ramya','lab',25000);
+1 row created.
+SQL> select * from user1.emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+         3 jaya       dtp             25000
+         3 chaithu    teacher         15000
+         4 madhu      office          20000
+         5 ramya      lab             25000
+
+6 rows selected.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> insert into user1.emp values(10,'rani','lab',15000);
+
+1 row created.
+
+SQL> insert into user1.emp values(11,'raja','lect',25000);
+1 row created.
+SQL> savepoint one
+  2  ;
+
+Savepoint created.
+
+SQL> insert into user1.emp values(12,'roja','lect',5000);
+
+1 row created.
+SQL> insert into user1.emp values(13,'jyo','lab',5000);
+
+1 row created.
+
+SQL> savepoint two
+  2  ;
+
+Savepoint created.
+
+SQL> rollback to one;
+
+Rollback complete.
+
+SQL> select * from user1.emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+         3 jaya       dtp             25000
+         3 chaithu    teacher         15000
+         4 madhu      office          20000
+         5 ramya      lab             25000
+        10 rani       lab             15000
+        11 raja       lect            25000
+
+8 rows selected.
+SQL> select * from user1.emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+         3 jaya       dtp             25000
+         3 chaithu    teacher         15000
+         4 madhu      office          20000
+         5 ramya      lab             25000
+        10 rani       lab             15000
+        11 raja       lect            25000
+
+8 rows selected.
+
+SQL> insert into user1.emp values(13,'jyo','lab',5000);
+
+1 row created.
+
+SQL> insert into user1.emp values(12,'roja','lect',5000);
+
+1 row created.
+SQL> savepoint two;
+
+Savepoint created.
+
+SQL> select * from user1.emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+         3 jaya       dtp             25000
+         3 chaithu    teacher         15000
+         4 madhu      office          20000
+         5 ramya      lab             25000
+        10 rani       lab             15000
+        11 raja       lect            25000
+        13 jyo        lab              5000
+        12 roja       lect             5000
+
+10 rows selected.
+
+SQL> rollback to one;
+
+Rollback complete.
+
+SQL> select * from user1.emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+         3 jaya       dtp             25000
+         3 chaithu    teacher         15000
+         4 madhu      office          20000
+         5 ramya      lab             25000
+        10 rani       lab             15000
+        11 raja       lect            25000
+
+8 rows selected.
+
+SQL> rollback to one;
+
+Rollback complete.
+
+SQL> select * from user1.emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+         3 jaya       dtp             25000
+         3 chaithu    teacher         15000
+         4 madhu      office          20000
+         5 ramya      lab             25000
+        10 rani       lab             15000
+        11 raja       lect            25000
+
+8 rows selected.
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> select * from user1.emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+         3 jaya       dtp             25000
+         3 chaithu    teacher         15000
+         4 madhu      office          20000
+         5 ramya      lab             25000
+
+6 rows selected.
+
+SQL> connect user1;
+Enter password:
+Connected.
+SQL> select * from emp;
+
+       ENO ENAME      DESIGNATIO     SALARY
+---------- ---------- ---------- ----------
+         1 swetha     architech       20000
+         2 maggi      lectural        25000
+         3 jaya       dtp             25000
+         3 chaithu    teacher         15000
+         4 madhu      office          20000
+         5 ramya      lab             25000
+
+6 rows selected.
+SQL> revoke all on emp from user2;
+
+Revoke succeeded.
+
+SQL> connect user2;
+Enter password:
+Connected.
+SQL> select * from user1.emp;
+select * from user1.emp
+                    *
+ERROR at line 1:
+ORA-00942: table or view does not exist
